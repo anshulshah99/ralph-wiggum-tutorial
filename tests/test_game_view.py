@@ -27,6 +27,11 @@ class TestGamePage:
         response = client.get('/')
         assert b'data-island="game"' in response.data
 
+    def test_index_shows_tagline(self, client: FlaskClient[Any]) -> None:
+        """Index page should include the review-workflow demo tagline."""
+        response = client.get('/')
+        assert b'A lightweight demo app for testing pull request review feedback.' in response.data
+
     def test_index_title(self, client: FlaskClient[Any]) -> None:
         """The page <title> should advertise Space Invaders."""
         response = client.get('/')
