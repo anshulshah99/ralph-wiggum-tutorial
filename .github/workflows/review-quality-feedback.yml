@@ -1,0 +1,35 @@
+name: Review Quality Feedback
+
+on:
+  pull_request_review:
+    types:
+      - submitted
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  review-quality-feedback:
+    name: Review Quality Feedback
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out trusted workflow code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          sparse-checkout: |
+            .github/scripts/review-quality-feedback.mjs
+          sparse-checkout-cone-mode: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Evaluate submitted review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/review-quality-feedback.mjs

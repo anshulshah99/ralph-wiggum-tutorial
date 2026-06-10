@@ -116,6 +116,8 @@ Watch the loop. When you see failures:
 | `PROMPT_build.md` | Prompt for build mode — implement, test, commit |
 | `IMPLEMENTATION_PLAN.md` | Living document tracking what's done and what's next |
 | `AGENTS.md` | Operational reference (ports, commands, patterns) for the agent |
+| `.github/workflows/review-quality-feedback.yml` | Scores submitted PR reviews and posts coaching feedback as a PR comment |
+| `.github/scripts/review-quality-feedback.mjs` | Heuristic evaluator for review quality based on review text and inline comments |
 | `specs/` | Application specifications the agent builds against |
 
 ## GitHub Agents & Skills
@@ -135,6 +137,27 @@ Watch the loop. When you see failures:
 | **test-in-browser** | Drives a headless browser via Playwright MCP to verify features end-to-end using accessibility snapshots |
 | **python-code-simplifier** | Refactors Python code for clarity while preserving behavior — enforces PEP 8, type annotations, early returns |
 | **typescript-code-simplifier** | Refactors TypeScript code for clarity — enforces strict typing, clean imports, small components |
+
+---
+
+## Review Quality Workflow
+
+The repository includes a GitHub Actions workflow at `.github/workflows/review-quality-feedback.yml` that runs whenever a pull request review is submitted.
+
+It evaluates the submitted review body and inline review comments using a simple rubric:
+- specificity
+- actionability
+- reasoning
+- observable coverage across the PR
+
+The workflow posts its feedback as a pull request comment. To avoid duplicate bot spam on reruns, it updates the existing feedback comment for the same review when possible.
+
+### Notes and limitations
+
+- The feedback is heuristic coaching, not a correctness check of the review itself.
+- Bot-authored reviews are ignored.
+- The workflow checks out the pull request base SHA, not PR head code, so it only runs trusted repository code.
+- Commenting permissions can still depend on your repository settings and token behavior for forked pull requests.
 
 ---
 
