@@ -20,4 +20,7 @@ def index():  # type: ignore[no-untyped-def]
     Serves HTML containing a ``[data-island="game"]`` mount point that the
     frontend hydrates with the canvas-based game on the client.
     """
-    return render_template('game.html')
+    return render_template(
+        'game.html',
+        page_tagline='A lightweight demo app for testing pull request review feedback.',
+    )
